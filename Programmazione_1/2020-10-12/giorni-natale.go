@@ -12,9 +12,9 @@ func main() {
 	fmt.Scan(&d)
 	fmt.Print("Inserisci il mese: ")
 	fmt.Scan(&m)
-	var dest1, dest2 int  // dest1 = primo genn; dest2 = natale
-	dest1 = (12 - m) * 30 + (30 - d)
-	dest2 = (12 - m) * 30 + (25 - d)
+	var dest1, dest2 int // dest1 = primo genn; dest2 = natale
+	dest1 = (12-m)*30 + (30 - d)
+	dest2 = (12-m)*30 + (25 - d)
 	fmt.Println("Al 1 gennaio mancano", dest1, "giorni")
 	fmt.Println("Al 25 dicembre mancano", dest2, "giorni")
 }

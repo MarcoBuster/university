@@ -9,6 +9,6 @@ func main() {
 	fmt.Print("Inserisci minuto: ")
 	fmt.Scan(&m)
 	var res int
-	res = (23 - h) * 60 + (60 - m)
+	res = (23-h)*60 + (60 - m)
 	fmt.Println("Mancano", res, "minuti a mezzanotte")
 }

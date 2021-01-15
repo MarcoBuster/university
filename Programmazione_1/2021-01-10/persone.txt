@@ -1,0 +1,5 @@
+1;Mario;Rossi;49
+7;Maria;Rossi;23
+18;Carla;Bianchi;55
+14;Marco;Aceti;19
+5;Barbara;Lodato;23

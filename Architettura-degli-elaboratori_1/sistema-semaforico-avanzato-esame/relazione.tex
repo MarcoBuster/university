@@ -1,0 +1,162 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{caption}
+\def\code#1{\texttt{#1}}
+
+\title{%
+Sistema semaforico avanzato \\
+\large{Progetto d'esame di Architettura degli Elaboratori I} \\
+}
+\author{Marco Aceti \\
+\small{\href{mailto:marco.aceti@studenti.unimi.it}{marco.aceti@studenti.unimi.it}}
+}
+\date{Primo appello di febbraio 2021}
+
+\begin{document}
+\maketitle
+
+\section{Introduzione}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\linewidth]{main.png}
+\end{figure}
+
+Partendo dall'attenta osservazione di un incrocio realmente presente nella mia cittadina, ho implementato in un circuito il \textbf{controllore} di un sistema semaforico avanzato utilizzando le porte logiche di base e i componenti offerti dal software Logisim.
+Come da specifica, il progetto supporta il controllo di 4 semafori, un timer per i pedoni, un orologio (regolabile) e la modalità notturna. \\
+Per un'esperienza realistica, è consigliato impostare il clock a 2Hz. 
+
+\clearpage
+
+\section{Analisi dei circuiti}
+\subsection{Circuito \code{main}}
+Il circuito \code{main} è il \textbf{principale}. Esso presenta:
+\begin{itemize}
+    \item \textbf{4 semafori A, B, C, D}: si comportano come indicato in specifica. Ogni semaforo ha tre lanterne corrispondenti ai tre stati che può assumere: \textit{rosso}, \textit{giallo}, \textit{verde}.
+    \item \textbf{Display pedoni}: si attiva solo quando il semaforo dei pedoni D è \textit{verde} o \textit{giallo}.
+    \begin{itemize}
+        \item Se il semaforo dei pedoni \textbf{D} è \textit{verde}, mostra un countdown da 9 a 0 corrispondente al numero dei secondi rimanenti ai pedoni per attraversare la strada.
+        \item Se il semaforo dei pedoni \textbf{D} è \textit{giallo}, mostra uno 0 fisso con il punto lampeggiante per avvisare ai pedoni che devono liberare l'incrocio. Idealmente, il segnale del punto lampeggiante può essere utilizzato per controllare un dispositivo di segnalazione acustico.
+    \end{itemize}
+    \item \textbf{Orario attuale}: mostra l'orario attuale, in formato 24 ore con 4 display per ore e minuti. L'orologio è regolabile tenendo premuti i bottoni sotto che aggiungono un'ora o un minuto a ogni ciclo di clock.
+    \item \textbf{Modalità notturna}: attiva un LED giallo quando la modalità notturna è attiva.
+\end{itemize}
+\subsection{Circuito \code{loop-counter}}
+\begin{wrapfigure}{l}{0.45\textwidth}
+    \includegraphics[width=0.95\linewidth]{loop-counter.png}
+\end{wrapfigure}
+Il circuito \code{loop-counter} è molto semplice: utilizzando un contatore e un comparatore, conta da 0 a \code{6C} ($= 108$). 
+Se il valore del contatore è strettamente maggiore di \code{6C}, il comparatore attiva un segnale per resettarlo. L'input è il segnale di clock e l'output è equivalente al valore del contatore.
+\clearpage
+
+\subsection{Circuito \code{state-selector}}
+
+\begin{wrapfigure}[10]{r}{0.45\textwidth}
+    \includegraphics[width=1\linewidth]{state-selector.png}
+\end{wrapfigure}
+Il circuito \code{state-selector} dà come output lo \textit{stato} che deve assumere il controllore in funzione del valore del contatore \code{loop-counter}; 
+così facendo possiamo assicurarci che ogni \textit{stato} duri il tempo stabilito.
+La seguente tabella mostra a sinistra tutti vari \textit{range} di valori che può assumere il contatore \code{loop-counter} ed a destra i relativi stati con la durata associata; riferirsi alla specifica per ulteriori dettagli.
+\\
+
+\begin{tabular}{|c | c || c | c |}
+    \hline
+    \multicolumn{4}{|c|}{\textbf{Valori di \code{loop-counter}}} \\ \hline
+    inizio & fine & stato & durata \\ \hline
+    \code{0x00} & \code{0x13} & 1 & 20 \\ \hline
+    \code{0x14} & \code{0x17} & 2 & 4 \\ \hline
+    \code{0x18} & \code{0x18} & 3 & 1 \\ \hline
+    \code{0x19} & \code{0x2C} & 4 & 20 \\ \hline 
+    \code{0x2D} & \code{0x30} & 5 & 4 \\ \hline 
+    \code{0x31} & \code{0x31} & 6 & 1 \\ \hline 
+    \code{0x32} & \code{0x59} & 7 & 40 \\ \hline 
+    \code{0x5A} & \code{0x5D} & 8 & 4 \\ \hline
+    \code{0x5E} & \code{0x5E} & 9 & 1 \\ \hline
+    \code{0x5F} & \code{0x67} & 10 & 9 \\ \hline 
+    \code{0x68} & \code{0x6B} & 11 & 4\\ \hline 
+    \code{0x6C} & \code{0x6C} & 12 & 1 \\ \hline 
+\end{tabular}
+
+\subsection{Circuito \code{controller}}
+
+\begin{wrapfigure}[15]{l}{0.46\textwidth}
+    \includegraphics[width=1\linewidth]{controller.png}
+\end{wrapfigure}
+
+Il \code{controller} è responsabile del controllo dei 4 semafori e del segnale \textit{activate timer}. Oltre al segnale di clock, esso prende in ingresso anche il segnale \textit{night mode}, attivato dal circuito \code{digital-clock}.
+Viene utilizzato il circuito \code{state-selector} per controllare i circuiti \code{semaphore} e il segnale \textit{activate timer}. Essendo i semafori di default rossi, gli stati 3, 6 e 9 sono ignorati.
+Se la il segnale \textit{night mode} è attivo, con le due porte AND del circuito viene disattivato il segnale di clock di \code{state-selector} e l'output \textit{activate timer}, in quanto devono essere entrambi inattivi di notte.
+
+\clearpage
+
+\subsection{Circuito \code{semaphore}}
+Il circuito \code{semaphore} rappresenta un semaforo. Ha come 4 ingressi (\textit{green in}, \textit{yellow in}, \textit{night mode} e il clock) e tre uscite (\textit{green out}, \textit{yellow out} e \textit{red out}).
+
+\begin{figure}[htp]
+    \includegraphics[width=\linewidth]{semaphore.png}
+    \captionsetup{belowskip=0pt}
+\end{figure}
+
+La necessità di questo circuito è data dalla complessità aggiunta dalla modalità notte. Di seguito alcune considerazioni a riguardo:
+\begin{itemize}
+    \item Se i segnali \textit{green in}, \textit{yellow in} e \textit{night mode} sono disattivati l'output \textit{red out} viene attivato. Si può anche dire che se è giorno e il semaforo non è né verde né giallo, allora è rosso.
+    \item I segnali \textit{green in} e \textit{yellow in} sono subordinati dal segnale \textit{night mode}. Se quest'ultimo è attivo, infatti, il semaforo smetterà di comportarsi normalmente.
+    \item Se la \textit{night mode} è attiva, l'output \textit{yellow out} sarà acceso solo quando il valore del contatore aumentato a ogni ciclo di clock sarà minore di 4. Il contatore a 3 bit si resetterà dopo altri 4 cicli di clock, causando un effetto di accensione alternata dell'uscita.
+\end{itemize}
+\clearpage
+
+\subsection{Circuito \code{pedestrians-timer}}
+\begin{figure}[htp]
+    \includegraphics[width=\linewidth]{pedestrains-timer.png}
+\end{figure}
+Il circuito \code{pedestrains-timer} serve per controllare il timer dei pedoni attivato quando il semaforo \textbf{D} è verde o è giallo (negli stati 10 e 11). Ha due ingressi (\textit{active} e il clock) e due uscite (\textit{display} e \textit{dot}). \\
+L'uscita è sempre nulla se il circuito non è attivo; quando viene attivato, il display deve mostrare un countdown da 9 a 0 (stato 10) e fare lampeggiare il \textit{dot} due volte (stato 11). 
+Analizziamo i componenti da sinistra verso destra:
+\begin{itemize}
+    \item Il \textbf{contatore} serve per tenere traccia dello stato del circuito. Oltre al clock, in ingresso ha il segnale \textit{active} \textbf{negato} collegato al \code{CLEAR}; in questo modo possiamo assicurarci che ad ogni attivazione il circuito partirà sempre dallo stato iniziale. Notare come il contatore faccia un countup da 0 a 15, piuttosto che un countdown.
+    \item L'uscita del contatore è collegata a \textbf{tre componenti}:
+    \begin{itemize}
+        \item Ad un \textbf{comparatore}, cui output servirà per stabilire quando attivare il punto lampeggiante.
+        \item Ad una \textbf{porta NOT} collegata ad un \textbf{sottrattore}, che sottrae 6. Questo è necessario per avere rispettivamente un countdown e un countdown che parte da 9 (al posto da 15).
+        \item Ad uno \textbf{splitter}, che seleziona il bit più a destra del numero.
+    \end{itemize}
+    \item Il \textbf{multiplexer} è necessario per selezionare cosa mostrare sul display:
+    \begin{itemize}
+        \item \textbf{Niente}, se l'ingresso \textit{active} è spento.
+        \item L'\textbf{uscita del sottrattore}, se il valore del contatore è $\leq 9$.
+        \item \textbf{0}, se il valore del contatore è $> 9$.
+    \end{itemize}
+    \item L'ultima porta \textbf{AND} attiva l'uscita \textit{dot} solo se:
+    \begin{itemize}
+        \item Il valore del contatore è \textbf{$>9$} (ovvero il countdown è arrivato a 0).
+        \item Il valore del contatore è \textbf{dispari}. In questo modo l'uscita, al posto di rimanere fissa, lampeggia. 
+    \end{itemize}
+\end{itemize}
+
+\clearpage
+
+\subsection{Circuito \code{digital-clock}}
+\begin{figure}[htp]
+    \includegraphics[width=\linewidth]{digital-clock.png}
+\end{figure}
+Il circuito \code{digital-clock} memorizza, mostra ed incrementa l'orario attuale in formato 24 ore. Inoltre, stabilisce se è bisogna attivare la \textit{night mode} oppure no.
+Per migliorare la leggibilità, ci sono 6 display (non necessari) che mostrano in modo trasparente l'orario attuale, comprendentente anche i secondi. 
+
+Il circuito è essenzialmente un insieme contatori collegati in serie con vari meccanismi per gestire il riporto, basandoci sull'uscita di \code{CARRY} che viene attivata quando il contatore raggiunge il suo massimo.
+Da destra verso sinistra:
+\begin{itemize}
+    \item Il primo contatore viene incrementato ad ogni ciclo di clock; il suo valore massimo è 9.
+    \item Ogni volta che il primo contatore raggiunge il suo massimo (9), il secondo contatore viene incrementato. Il suo valore massimo è 5.
+    \item Ogni volta che sia il primo che il secondo contatore hanno raggiunto il loro massimo (59), il terzo contatore viene incrementato.
+    \item \textit{e così via...}
+\end{itemize}
+Se il valore degli ultimi due contatori (delle ore) è $>23$, vengono entrambi resettati a 0. Se il loro valore è compreso tra 22 e 06 allora viene attivata la \textit{night mode}.
+
+Per incrementerare ore e minuti, sono presenti due ulteriori input \textbf{+H} e \textbf{+M} che, messi in OR con i riporti, aumentano artificialmente i valori del terzo e del penultimo contatore.
+
+\end{document}
+

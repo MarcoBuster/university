@@ -1,0 +1,69 @@
+## Gruppi
+
+Gruppo
+ ~ Un monoide si dice gruppo se ogni suo elemento ammette un inverso. Valgono le seguenti prioprietà:
+   - il neutro è unico (già dimostrato)
+   - l'inverso è unico (già dimostrato)
+   - vale $a \star b = a \star c \Rightarrow b = c$
+ 
+Gruppo commutativo o abeliano
+ ~ Un gruppo $(G, \, \star)$ si dice commutativo o abeliano se $\star$ è commutativa.
+ 
+Di seguito alcune proprietà dei gruppi.
+
+$a \star b = a \star c \Rightarrow b = c$
+ ~ > __Dimostrazione__. Sia $(G, \, \star)$ un gruppo e $a'$ inverso di $a$.
+   > Moltiplico $a \star b = a \star c$ a sinistra per $a'$.
+   > $a' \star (a \star b) = a' \star (a \star c) \Rightarrow (a' \star a) \star b = (a' \star a) \star c \Rightarrow$
+   > essendo $(a' \star a) = e$, $\Rightarrow e \star b = e \star c \Rightarrow b = c$
+
+Equazione a una soluzione
+ ~ L'equazione di una incognita ($x$) del tipo $a \star x = b$ ha una e una sola soluzione, che è $x = a^{-1} \star b$.
+ 
+Inverso dell'inverso
+ ~ L'inverso dell'inverso di $a$ è $a$, cioè $(a^{-1})^{-1} = a$
+ 
+$(a \star b)^{-1} = b^{-1} \star a^{-1}$
+
+Potenze
+ ~ Nei gruppi sono definite le potenze. Posto $a^0 = e$, abbiamo: $$
+ a^n = a \star a \, \star \, ... \star \ a \\
+ a^{-n} = \underbrace{a^{-1} \star a^{-1} \, \star \, ... \star \ a^{-1}}_{n \text{ volte}}
+ $$ Inoltre, $\forall \alpha, \beta \in \mathbb{Z}, \, a^\alpha \star a^\beta = a^{\alpha + \beta}$.
+ 
+Sottoinsieme di un gruppo
+ ~ Sia $(G, \, \star)$ un gruppo. Un sottoinsieme $H \subseteq G$ si chiama sottogruppo di $G$ se:
+ 1. $\forall h_1, h_2 \in H, \, h_1 \star h_2 \in H$;
+ 2. $e \in H$;
+ 3. $\forall h \in H, \, h^{-1} \in H$.
+ 
+Funzione di un gruppo
+ ~ Sia $(G, \, \star)$ e $(M, \, \circ)$ due gruppi e $f \! : G \rightarrow \Gamma$ una funzione.
+ 
+Omomorfismo
+ ~ Diciamo che $f$ è un omomorfismo di gruppi se $\forall g, h \in G$: $$
+ \underbrace{f(\overbrace{g \star h}^{\text{Operazione in G}})}_{\in \Gamma} = \overbrace{\underbrace{f(g)}_{\in \Gamma} \star \underbrace{f(h)}_{\in \Gamma}}^{\text{Operazione in } \Gamma}
+ $$
+ 
+Endomorfismo
+ ~ $f$ omomoforismo si dice endomorfismo se $G = \Gamma$. 
+ 
+Isomorfismo
+ ~ Un omomorfismo biettivo (come funzione) si dice isomorfismo.
+
+Anello
+ ~ Sia $A$ un insieme, $\star$ e $\circ$ due operazioni su $A$, diciamo che $(A, \, star)$ è un _anello_ se:
+    1. $(A, \, \star)$ è un gruppo;
+    2. $(A, \circ)$ è un monoide;
+    3. proprietà distributiva: $\forall a,b,c \in A, \, a \circ (b \star c) = (a \circ b) \star (a \circ c)$.
+ 
+    Di solito in un anello l'operazione $\star$ si indica con $+$ e l'operazione $\circ$ si indica con $\cdot$. 
+    Il neutro rispetto a $+$ si indica con $0_A$, il neutro rispetto a $\cdot$ si indica con $1_A$
+ 
+Campo
+ ~ Un _campo_ è un anello tale che $(A - 0_A, \, \cdot)$ un gruppo abeliano e $(A, \, +)$ è un gruppo abeliano. 
+ Cioè, $(\mathbb{K}, \, +, \, \cdot)$ è campo se:
+ 1. $(\mathbb{K}, \, +)$ è un gruppo abeliano;
+ 2. $(\mathbb{K} - \{ 0\}, \, \cdot)$ è un gruppo abeliano (e $(\mathbb{K}, \, \cdot)$ è monoide);
+ 3. $\forall k_1, k_2, k_3 \in \mathbb{K} , \; k_1 \cdot (k_2 + k_3) = k_1 \cdot k_2 + k_1 + k_3$. 
+

@@ -24,7 +24,7 @@ Funzione suriettiva
  Ogni elemento di $B$ ha almeno una retroimmagine.
  
 Funzione biettiva
- ~ Sia $F \! : A \rightarrow B$ una funzione. Diciamo che $F$ è biettiva se è sia inettiva che suiettiva, ovvero $F$ ha esattamente una retroimmagine.
+ ~ Sia $F \! : A \rightarrow B$ una funzione. Diciamo che $F$ è biettiva se è sia inettiva che suriettiva, ovvero $F$ ha esattamente una retroimmagine.
 
 Funzione composta
  ~ Siano $f \! : A \rightarrow B$ e $g \! : B \rightarrow C$ due funzioni. Allora esiste una funzione $g \circ f \! : A \rightarrow C$ così definita:

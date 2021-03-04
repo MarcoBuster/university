@@ -19,8 +19,8 @@ Funzione inettiva
  Se due elementi hanno la stessa immagine allora coincidono.
  Ogni elemento di $B$ ha al massimo una retroimmagine.
  
-Funzione suiettiva
- ~ Sia $F \! : A \rightarrow B$ una funzione. Diciamo che $F$ è suiettiva se $\forall b \in B, \, \exists \, a \in A \text{ tale che } F(a) = b$
+Funzione suriettiva
+ ~ Sia $F \! : A \rightarrow B$ una funzione. Diciamo che $F$ è suriettiva se $\forall b \in B, \, \exists \, a \in A \text{ tale che } F(a) = b$
  Ogni elemento di $B$ ha almeno una retroimmagine.
  
 Funzione biettiva

@@ -59,11 +59,39 @@ Anello
  
     Di solito in un anello l'operazione $\star$ si indica con $+$ e l'operazione $\circ$ si indica con $\cdot$. 
     Il neutro rispetto a $+$ si indica con $0_A$, il neutro rispetto a $\cdot$ si indica con $1_A$
+    
+Elemento unitario
+ ~ Sia $(A, \, +, \, \cdot)$ un anello. Se $a \in A$ ammette inverso rispetto all'operazione $\cdot$, $a$ si chiama _elemento unitario_.
+
+Divisore dello zero
+ ~ Sia $(A, \, +, \, \cdot)$ un anello. Dico che un elemento $a \in A$ e $a \neq 0_A$ si chiama _divisore dello zero_ se: $$
+ \exists b \neq 0_A, \, b \in A \text{ tale che } a \cdot b = 0_A
+ $$
+
+__Proposizione__. Sia $(A, \, +, \, \cdot)$ un anello, allora:
+1. $\forall a \in A, \, a \cdot 0_A = 0_A \cdot a = 0_A$
+    > __Dimostrazione__. 
+    > - $a + 0_A = a$ (perché $0_A$ è neutro rispetto a $+$)
+    > - $a \cdot (a + 0_A) = a \cdot a$ (moltiplico per $a$ a sinistra)
+    > - $a \cdot a + a \cdot 0_A = a \cdot a$ (proprietà distributiva)
+    > - $\underbrace{-a \cdot a + a \cdot a}_{0_A} + a \cdot 0_A = \underbrace{-a \cdot a + a \cdot a}_{0_A}$ (sommato $-a \cdot a$ a entrambi in quanto inverso di $a \cdot a$ rispetto a $+$)
+    > - $0_A + a \cdot 0_A = 0_A \Rightarrow a \cdot 0_A = 0_A$ ($0_A$ è neutro rispetto a $+$)
+    >
+2. Se $a$ è unitario o ammette inverso rispetto ad $a$ allora non è divisore dello zero.
+    > __Dimostrazione__.
+    > - Se $a$ è unitario (cioè $\exists a^{-1} \text{ tale che } a \cdot a^{-1} = a^{-1} \cdot a = 1_A$) allora $a$ non è divisore dello zero.
+    > - Sia $b \text{ tale che } a \cdot b = 0_A$ 
+    > - $a \cdot b = 0_A$ (voglio mostrare che $b = 0_A$)
+    > - $\underbrace{a^{-1} \cdot a}_{1_A} \cdot b = \underbrace{a^{-1} \cdot 0_A}_{0_A}$ (moltiplico a sinistra per $a^{-1}$)
+    > - $\underbrace{1_A \cdot b}_b = 0_A$ (per la proposizione __1.__)
+    > - $b = 0_A \Rightarrow a \text{ non è divisore dello zero.}$
  
 Campo
  ~ Un _campo_ è un anello tale che $(A - 0_A, \, \cdot)$ un gruppo abeliano e $(A, \, +)$ è un gruppo abeliano. 
  Cioè, $(\mathbb{K}, \, +, \, \cdot)$ è campo se:
- 1. $(\mathbb{K}, \, +)$ è un gruppo abeliano;
- 2. $(\mathbb{K} - \{ 0\}, \, \cdot)$ è un gruppo abeliano (e $(\mathbb{K}, \, \cdot)$ è monoide);
- 3. $\forall k_1, k_2, k_3 \in \mathbb{K} , \; k_1 \cdot (k_2 + k_3) = k_1 \cdot k_2 + k_1 + k_3$. 
+    1. $(\mathbb{K}, \, +)$ è un gruppo abeliano;
+     2. $(\mathbb{K} - \{ 0\}, \, \cdot)$ è un gruppo abeliano (e $(\mathbb{K}, \, \cdot)$ è monoide);
+    3. $\forall k_1, k_2, k_3 \in \mathbb{K} , \; k_1 \cdot (k_2 + k_3) = k_1 \cdot k_2 + k_1 + k_3$. 
+
+    Quindi, se $\mathbb{K}$ è campo allora ogni $k \in \mathbb{K} - \{ 0_\mathbb{K} \}$ è invertibile, cioè ogni $k \in \mathbb{K} - \{ 0_\mathbb{K} \}$ è unitario. In particolare, non ci sono divisori dello zero.
 

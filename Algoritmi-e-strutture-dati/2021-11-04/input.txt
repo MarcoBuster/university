@@ -1,0 +1,17 @@
+b 10
++ 1 Rossi
++ 3 Bianchi
+p
+m 1 5
+p
++ 9 Verdi
+p
+- 3
+p
+b 20
++ 10 Mario
+p
+m 1 10
+m 10 11
+p
+f
